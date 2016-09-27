@@ -31,50 +31,50 @@ GPIOAccessory.prototype.getServices = function() {
 GPIOAccessory.prototype.getOn = function(callback) {
     gpio.read(this.pin, function(err, value) {
         if (err) {
-        	callback(err);
+            callback(err);
         } else {
-	        var on = value;
-    	    callback(null, on);
-    	}
+            var on = value;
+            callback(null, on);
+        }
     });
 }
 
 GPIOAccessory.prototype.setOn = function(on, callback) {
     if (on) {
         this.pinAction(0);
-		if (is_defined(this.duration) && is_int(this.duration)) {
-			this.pinTimer()
-		}
-		callback(null);
+        if (is_defined(this.duration) && is_int(this.duration)) {
+            this.pinTimer()
+        }
+        callback(null);
     } else {
-		this.pinAction(1);
-		callback(null);
+        this.pinAction(1);
+        callback(null);
     }
 }
 
 GPIOAccessory.prototype.pinAction = function(action) {
-        this.log('Turning ' + (action == 0 ? 'on' : 'off') + ' pin #' + this.pin);
+    this.log('Turning ' + (action == 0 ? 'on' : 'off') + ' pin #' + this.pin);
 
-        var self = this;
-        gpio.open(self.pin, 'output', function() {
+    var self = this;
+    gpio.open(self.pin, 'output', function() {
         gpio.write(self.pin, action, function() {
-		gpio.close(self.pin);
-		return true;
+            gpio.close(self.pin);
+            return true;
         });
     });
 }
 
 GPIOAccessory.prototype.pinTimer = function() {
-        var self = this;
-        setTimeout(function() {
-			self.pinAction(1);
-        }, this.duration);
+    var self = this;
+    setTimeout(function() {
+        self.pinAction(1);
+    }, this.duration);
 }
 
 var is_int = function(n) {
-   return n % 1 === 0;
+    return n % 1 === 0;
 }
 
 var is_defined = function(v) {
-	return typeof v !== 'undefined';
+    return typeof v !== 'undefined';
 }
