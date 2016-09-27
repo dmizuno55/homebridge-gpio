@@ -22,6 +22,8 @@ function GPIOAccessory(log, config) {
         .on('get', this.getOn.bind(this))
         .on('set', this.setOn.bind(this));
 
+    // initialize pin with off
+    gpio.open(this.pin, 'output down');
 }
 
 GPIOAccessory.prototype.getServices = function() {
